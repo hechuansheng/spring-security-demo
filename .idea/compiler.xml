@@ -8,11 +8,13 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="security-inmemory" />
+        <module name="security-indb" />
       </profile>
     </annotationProcessing>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="security-indb" options="-parameters" />
       <module name="security-inmemory" options="-parameters" />
       <module name="spring-security-demo" options="-parameters" />
     </option>

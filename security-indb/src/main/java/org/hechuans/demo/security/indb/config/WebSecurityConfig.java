@@ -1,20 +1,25 @@
-package org.hechuans.demo.security.inmemory.config;
+package org.hechuans.demo.security.indb.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 /**
  * @author : hechuansheng
- * @date : 2023/6/5 17:14
+ * @date : 2023/6/6 10:04
  * @description :
  * @since : version-1.0
  */
 @Configuration
-//开启方法权限控制
-//@EnableGlobalMethodSecurity
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+    @Bean
+    public PasswordEncoder bCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -37,7 +42,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 //                .formLogin().permitAll();      //放开form表单登录登录
 
         //放开form表单登录登录
-        http.formLogin().permitAll();
+        http.formLogin()
+//                .successHandler()         //设置认证成功处理器
+//                .failureHandler()         //设置认证失败处理器
+                .permitAll();
 
     }
 

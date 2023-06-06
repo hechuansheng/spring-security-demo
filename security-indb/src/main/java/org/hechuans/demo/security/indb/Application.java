@@ -1,11 +1,11 @@
-package org.hechuans.demo.security.inmemory;
+package org.hechuans.demo.security.indb;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @author : hechuansheng
- * @date : 2023/6/5 15:34
+ * @date : 2023/6/6 8:56
  * @description :
  * @since : version-1.0
  */

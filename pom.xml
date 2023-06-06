@@ -10,6 +10,7 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>security-inmemory</module>
+        <module>security-indb</module>
     </modules>
 
     <properties>
