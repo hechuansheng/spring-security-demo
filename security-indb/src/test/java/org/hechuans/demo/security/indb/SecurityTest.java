@@ -23,14 +23,14 @@ public class SecurityTest {
 
     @Test
     public void testJWT() {
-        String jwtToken = JWTUtils.createJWT(12306L, Arrays.asList("student", "teacher"));
+        String jwtToken = JWTUtils.createJWT("{\"userid\":123456}", Arrays.asList("student", "teacher"));
         log.info("jwtToken: {}", jwtToken);
 
         Assert.assertTrue(JWTUtils.verifyJWTToken(jwtToken));
 
-        long userId = JWTUtils.getUserIdFromJWTToken(jwtToken);
+        String userJsonStr = JWTUtils.getUserFromJWTToken(jwtToken);
 
-        log.info("userId: {}", userId);
+        log.info("userJsonStr: {}", userJsonStr);
 
     }
 

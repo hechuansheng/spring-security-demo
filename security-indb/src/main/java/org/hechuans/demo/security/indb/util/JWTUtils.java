@@ -20,7 +20,7 @@ public class JWTUtils {
 
     private static final String SECRET = "hechuans_secret";
 
-    public static String createJWT(long userId, List<String> auths) {
+    public static String createJWT(String userJsonStr, List<String> auths) {
         Map<String, Object> headerMap = new HashMap<>();
         headerMap.put("alg", ALG);
         headerMap.put("typ", "JWT");
@@ -33,7 +33,7 @@ public class JWTUtils {
                 .withIssuer("hechuans")
                 .withIssuedAt(current)
                 .withExpiresAt(expDate)
-                .withClaim("userId", userId)
+                .withClaim("user", userJsonStr)
                 .withClaim("auth", auths)
                 .sign(Algorithm.HMAC256(SECRET));
     }
@@ -49,15 +49,25 @@ public class JWTUtils {
         }
     }
 
-    public static Long getUserIdFromJWTToken(String jwtToken) {
-        JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
-        DecodedJWT decodedJWT = null;
+    public static String getUserFromJWTToken(String jwtToken) {
         try {
-            decodedJWT = verifier.verify(jwtToken);
-            return decodedJWT.getClaim("userId").asLong();
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
+            DecodedJWT decodedJWT = verifier.verify(jwtToken);
+            return decodedJWT.getClaim("user").asString();
         } catch (JWTVerificationException e) {
             e.printStackTrace();
-            return -1L;
+            return null;
+        }
+    }
+
+    public static List<String> getUserAuthFromJWTToken(String jwtToken) {
+        try {
+            JWTVerifier verifier = JWT.require(Algorithm.HMAC256(SECRET)).build();
+            DecodedJWT decodedJWT = verifier.verify(jwtToken);
+            return decodedJWT.getClaim("auth").asList(String.class);
+        } catch (JWTVerificationException e) {
+            e.printStackTrace();
+            return null;
         }
     }
 }
