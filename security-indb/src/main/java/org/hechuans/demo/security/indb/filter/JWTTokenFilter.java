@@ -36,22 +36,32 @@ public class JWTTokenFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String requestURI = request.getRequestURI();
+
+        //这里不能读取到WebSecurityConfig中的permitAll配置自动跳过
         if ("/login".equals(requestURI)) {
             doFilter(request, response, filterChain);
             return;
         }
 
         String authorizationStr = request.getHeader("Authorization");
+        if (!StringUtils.hasLength(authorizationStr)) {
+//            ReturnData returnData = ReturnData.builder().code(601).msg("failed").data("token为空").build();
+//            printlnReturnData(response, returnData);
+            //可以不返回ReturnData，继续往下走会跳转到登录界面
+            doFilter(request, response, filterChain);
+            return;
+        }
         String jwtToken = authorizationStr.replace("Bearer ", "");
 
         if (!StringUtils.hasLength(jwtToken)) {
-            ReturnData returnData = ReturnData.builder().code(601).msg("failed").data("token为空").build();
-            printlnReturnData(response, returnData);
+//            ReturnData returnData = ReturnData.builder().code(601).msg("failed").data("token为空").build();
+//            printlnReturnData(response, returnData);
+            doFilter(request, response, filterChain);
             return;
         }
 
         if (!JWTUtils.verifyJWTToken(jwtToken)) {
-            ReturnData returnData = ReturnData.builder().code(601).msg("failed").data("token校验失败").build();
+            ReturnData returnData = ReturnData.builder().code(601).msg("failed").data("用户登录过期！").build();
             printlnReturnData(response, returnData);
             return;
         }
